@@ -2,20 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 20% 98%;
+    --foreground: 0 0% 7%;
+    --primary: 217 39% 47%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 0 0% 100%;
+    --success: 217 39% 47%;
+    --warning: 17 82% 66%;
+    --error: 0 94% 54%;
+    --muted: 0 0% 0%;
+    --muted-foreground: 0 0% 0%;
+  }
+
+  .dark {
+    --background: 0 0% 7%;
+    --foreground: 210 20% 98%;
+    --primary: 217 39% 47%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 0 0% 100%;
+    --success: 217 39% 47%;
+    --warning: 17 82% 66%;
+    --error: 0 92% 26%;
+    --muted: 0 0% 100%;
+    --muted-foreground: 0 0% 100%;
+  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+h1 {
+  @apply text-3xl md:text-6xl tracking-tighter leading-none font-bold
+}
+
+h2 {
+  @apply text-xl md:text-3xl tracking-tighter leading-none font-bold
+}
+
+h3 {
+  @apply text-xl tracking-tighter leading-none font-medium
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+.skeleton-animation {
+  background: rgba(200, 200, 200, 0.2);
+  background: -webkit-gradient(linear,
+      left top,
+      right top,
+      color-stop(8%, rgba(180, 180, 180, 0.2)),
+      color-stop(18%, rgba(200, 200, 200, 0.3)),
+      color-stop(33%, rgba(200, 200, 200, 0.2)));
+  background: linear-gradient(to right,
+      rgba(180, 180, 180, 0.2) 8%,
+      rgba(200, 200, 200, 0.3) 18%,
+      rgba(200, 200, 200, 0.2) 33%);
+  background-size: 800px 100px;
+  animation: wave-lines 2s infinite ease-out;
 }
