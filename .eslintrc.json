@@ -1,3 +1,10 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript",
+    "./node_modules/standard/eslintrc.json"
+  ],
+  "rules": {
+    "@next/next/no-img-element": "off"
+  }
 }
