@@ -1,4 +1,4 @@
-My Service App
+## NextJS Started App
 
 ## Getting Started
 
