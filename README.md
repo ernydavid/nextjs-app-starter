@@ -11,11 +11,13 @@ pnpm install
 
 
 Next, configuring .env file:
+```bash
 NEXT_PUBLIC_APP_URL=
 DATABASE_URL=
 SESSION_SECRET=
 RESEND_API_KEY=
 RESEND_EMAIL_FROM=
+```
 
 migrate schema to db using 'npm run db:generate' and 'npm run db:push' or using pnpm too.
 
