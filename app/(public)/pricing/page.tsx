@@ -1,4 +1,4 @@
-import { Navbar } from '@/components/ui/marketing/navbar'
+import { Navbar } from '@/app/(public)/_components/navbar'
 
 export default function Page () {
   return (

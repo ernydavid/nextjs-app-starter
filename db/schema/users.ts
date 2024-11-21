@@ -82,3 +82,4 @@ export const accounts = pgTable(
 )
 
 export type UserType = InferSelectModel<typeof users>
+export type Role = 'user' | 'admin' | null

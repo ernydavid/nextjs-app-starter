@@ -8,16 +8,22 @@ export function Logo () {
       href='/'
       className='hover:opacity-90'
     >
-      <img
-        src='/assets/logo-light.svg'
-        alt='Company Logo'
-        className='h-[18px] md:h-[20px] dark:hidden block'
-      />
-      <img
-        src='/assets/logo-dark.svg'
-        alt='Company Logo'
-        className='hidden dark:block h-[18px] md:h-[20px]'
-      />
+      <div className='h-5 dark:hidden flex items-center gap-2'>
+        <img
+          src='/icon-light.svg'
+          alt='Company Logo Icon'
+          className='w-5 h-5'
+        />
+        <span className='font-bold tracking-tighter'>STARTER</span>
+      </div>
+      <div className='h-5 hidden dark:flex items-center gap-2'>
+        <img
+          src='/icon-dark.svg'
+          alt='Company Logo Icon'
+          className='w-5 h-5'
+        />
+        <span className='font-bold tracking-tighter'>E.START</span>
+      </div>
     </Link>
   )
 }
@@ -32,7 +38,7 @@ export function LogoIcon ({ className }: {
       className='hover:opacity-90'
     >
       <img
-        src='/icon.svg'
+        src='/icon-light.svg'
         alt='Company Logo Icon'
         className={cn(
           'h-5 dark:hidden block',

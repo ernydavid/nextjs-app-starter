@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils'
 import { cva, VariantProps } from 'class-variance-authority'
 import { forwardRef, LabelHTMLAttributes } from 'react'
 
@@ -20,9 +21,13 @@ const labelVariants = cva(
 interface LabelProps extends LabelHTMLAttributes<HTMLLabelElement>, VariantProps<typeof labelVariants> {}
 
 const Label = forwardRef<HTMLLabelElement, LabelProps>(
-  ({ ...props }, ref) => {
+  ({ size, className, ...props }, ref) => {
     return (
       <label
+        className={cn(
+          labelVariants({ size }),
+          className
+        )}
         ref={ref}
         {...props}
       />
