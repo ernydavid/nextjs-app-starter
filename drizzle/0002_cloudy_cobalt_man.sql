@@ -1,0 +1,1 @@
+ALTER TABLE "password_reset_token" DROP COLUMN IF EXISTS "email";

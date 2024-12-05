@@ -43,6 +43,14 @@ export function LoginForm () {
             disabled={isLoading}
             sizes='sm'
           />
+          <div className='flex'>
+            <Link
+              href='/forgot-password'
+              className='text-sm text-muted-foreground hover:text-foreground/70 hover:underline underline-offset-2'
+            >
+              Forgot your password?
+            </Link>
+          </div>
           {state?.errors?.password && state.errors?.password.map((error, index) => (
             <p
               key={index}

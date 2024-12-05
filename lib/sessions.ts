@@ -5,9 +5,22 @@ import { SessionPayload } from '@/lib/definitions'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { DEFAULT_AUTH_REDIRECT_PAGE, DEFAULT_UNAUTH_REDIRECT_PAGE } from '@/middleware-routes'
+import { isRedirectError } from 'next/dist/client/components/redirect'
 
 const secretKey = process.env.SESSION_SECRET
 const encodedKey = new TextEncoder().encode(secretKey)
+
+// define a secret key using openssl
+if (!process.env.SESSION_SECRET) {
+  throw new Error('Session secret code is not defined. Generate secret code using "openssl rand -base64 32" command. Then save on SESSION_SECRET in .env file.')
+}
+
+// set cookie name to session cookie on .env
+if (!process.env.COOKIE_SESSION_NAME) {
+  throw new Error('Please, asign a cookie name to manage sessions on cookies. Add COOKIE_SESSION_NAME on .env file.')
+}
+
+const cookieName = process.env.COOKIE_SESSION_NAME
 
 export async function encrypt (payload: SessionPayload) {
   return new SignJWT(payload)
@@ -34,34 +47,54 @@ export async function createSession (userId: string) {
 
   const session = await encrypt({ userId, expiresAt })
 
-  await (await cookies()).set(
-    'session',
-    session,
-    {
-      httpOnly: true,
-      secure: true,
-      expires: expiresAt,
-      sameSite: 'lax',
-      path: '/'
-    }
-  )
+  try {
+    const cookieStore = await cookies()
 
-  redirect(DEFAULT_AUTH_REDIRECT_PAGE)
+    await cookieStore.set(
+      cookieName,
+      session,
+      {
+        httpOnly: true,
+        secure: true,
+        expires: expiresAt,
+        sameSite: 'lax',
+        path: '/'
+      }
+    )
+
+    return redirect(DEFAULT_AUTH_REDIRECT_PAGE)
+  } catch (error) {
+    if (isRedirectError(error)) {
+      throw error
+    }
+    console.log(error)
+  }
 }
 
 export async function verifySession () {
-  const cookie = await (await cookies()).get('session')?.value
-  const session = await decrypt(cookie)
+  const cookieStore = await cookies()
+  const cookie = await cookieStore.get(cookieName)?.value
 
-  if (!session?.userId) {
-    redirect(DEFAULT_UNAUTH_REDIRECT_PAGE)
+  try {
+    const session = await decrypt(cookie)
+
+    if (!session?.userId) {
+      redirect(DEFAULT_UNAUTH_REDIRECT_PAGE)
+    }
+
+    return { isAuth: true, userId: session.userId }
+  } catch (error) {
+    if (isRedirectError(error)) {
+      throw error
+    }
+    console.log(error)
   }
-
-  return { isAuth: true, userId: session.userId }
 }
 
 export async function updateSession () {
-  const session = await (await cookies()).get('session')?.value
+  const cookieStore = await cookies()
+  const session = await cookieStore.get(cookieName)?.value
+
   const payload = await decrypt(session)
 
   if (!session || !payload) {
@@ -70,7 +103,7 @@ export async function updateSession () {
 
   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 
-  await (await cookies()).set('session', session, {
+  await (await cookies()).set(cookieName, session, {
     httpOnly: true,
     secure: true,
     expires,
@@ -80,13 +113,32 @@ export async function updateSession () {
 }
 
 export async function deleteSession () {
-  await (await cookies()).delete('session')
+  const cookieStore = await cookies()
+  await cookieStore.delete(cookieName)
+
   redirect(DEFAULT_UNAUTH_REDIRECT_PAGE)
 }
 
 export async function existingSession () {
   const cookieList = await cookies()
-  const session = cookieList.get('session')
+  const session = cookieList.get(cookieName)
 
   return !!session
+}
+
+export async function getSession () {
+  const cookieStore = await cookies()
+  const cookie = cookieStore.get(cookieName)?.value
+
+  if (!cookie) {
+    return null
+  }
+
+  const session = await decrypt(cookie)
+
+  if (session) {
+    return session?.userId
+  } else {
+    return null
+  }
 }

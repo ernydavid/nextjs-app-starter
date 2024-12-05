@@ -1,10 +1,8 @@
 interface Props {
-  name: string
-  email: string
-  verificationUrl: string
+  passwordResetUrl: string
 }
 
-export function VerificationTokenEmail ({ name, email, verificationUrl }: Readonly<Props>) {
+export function PasswordResetEmail ({ passwordResetUrl }: Readonly<Props>) {
   return (
     <div>
       <style>
@@ -56,13 +54,13 @@ export function VerificationTokenEmail ({ name, email, verificationUrl }: Readon
         >
           <tr>
             <td style={{ padding: '20px', textAlign: 'left' }}>
-              <h1 style={{ margin: 0, fontSize: '24px' }}>Hi, {name}!</h1>
+              <h1 style={{ margin: 0, fontSize: '24px' }}>Reset your password.</h1>
               <p style={{ fontSize: '16px', lineHeight: 1.5 }}>
-                Verify your email ({email}) here.
+                Reset your password here. Please click on link below:
               </p>
               <div className='text-center'>
                 <a
-                  href={verificationUrl}
+                  href={passwordResetUrl}
                   className='button'
                   style={{
                     padding: '15px 25px',
@@ -74,7 +72,7 @@ export function VerificationTokenEmail ({ name, email, verificationUrl }: Readon
                     display: 'inline-block'
                   }}
                 >
-                  Verify Account
+                  Reset Password
                 </a>
               </div>
             </td>

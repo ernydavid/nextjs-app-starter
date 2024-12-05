@@ -13,7 +13,7 @@ export const getUser = cache(async () => {
   // 2. fetch user data
   const data = await db.select()
     .from(users)
-    .where(eq(users.id, session.userId as string))
+    .where(eq(users.id, session?.userId as string))
 
   const user = data[0]
 

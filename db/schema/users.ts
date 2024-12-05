@@ -1,32 +1,6 @@
 import { InferSelectModel, sql } from 'drizzle-orm'
 import { pgEnum, pgTable, uuid, varchar, text, timestamp, boolean, primaryKey, integer } from 'drizzle-orm/pg-core'
 
-// first, verify if the db have been installed "uuid-ossp"
-// query: SELECT * FROM pg_extension WHERE extname = 'uuid-ossp';
-// if not: ---->
-// query: CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-// test successfully installed: await db.execute(sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`);
-
-// query instalation 'uuid-ossp':
-// await db.execute(sql`
-//   DO $$
-//   BEGIN
-//     IF NOT EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'uuid-ossp') THEN
-//       CREATE EXTENSION "uuid-ossp";
-//     END IF;
-//   END $$;
-// `);
-
-// if role error
-// await db.execute(sql`
-//   DO $$
-//   BEGIN
-//     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'role_enum') THEN
-//       CREATE TYPE role_enum AS ENUM ('user', 'admin');
-//     END IF;
-//   END $$;
-// `);
-
 // Define ENUM type for roles
 const roleEnum = pgEnum('role_enum', ['user', 'admin'])
 
@@ -41,21 +15,6 @@ export const users = pgTable('users', {
   image: text('image'),
   isTwoFactorEnabled: boolean('isTwoFactorEnabled').default(false)
 })
-
-// Create Verification Token Table
-export const verificationToken = pgTable(
-  'verification_token',
-  {
-    identifier: text('identifier').notNull(),
-    expires: timestamp('expires', { mode: 'date' }).notNull(),
-    token: text('token').notNull()
-  },
-  (verificationToken) => ({
-    compositePk: primaryKey({
-      columns: [verificationToken.identifier, verificationToken.token]
-    })
-  })
-)
 
 // Create Accounts Table
 export const accounts = pgTable(

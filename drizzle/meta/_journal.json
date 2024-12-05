@@ -8,6 +8,20 @@
       "when": 1731711774418,
       "tag": "0000_flawless_wonder_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1733371618328,
+      "tag": "0001_pink_loki",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1733374609890,
+      "tag": "0002_cloudy_cobalt_man",
+      "breakpoints": true
     }
   ]
 }
