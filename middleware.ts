@@ -1,24 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
-import { decrypt } from '@/lib/sessions'
 import { AUTH_ROUTES, DEFAULT_AUTH_REDIRECT_PAGE, DEFAULT_UNAUTH_REDIRECT_PAGE, PROTECTED_ROUTE_PREFIX } from '@/middleware-routes'
-
-async function getSession () {
-  const cookiesList = await cookies()
-  const cookie = cookiesList.get('session')?.value
-
-  if (!cookie) {
-    return null
-  }
-
-  const session = await decrypt(cookie)
-
-  if (session) {
-    return session?.userId
-  } else {
-    return null
-  }
-}
+import { getSession } from './lib/sessions'
 
 export default async function middleware (req: NextRequest) {
   // 1. check is route is protected or public
