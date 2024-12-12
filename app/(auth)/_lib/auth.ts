@@ -5,21 +5,14 @@ import { users } from '@/db/schema/users'
 import { z } from 'zod'
 import bcrypt from 'bcryptjs'
 import { createSession, deleteSession } from '@/lib/sessions'
-import { generatePasswordResetToken, generateVerificationToken } from '@/lib/tokens'
+import { deleteTwoFactor, generatePasswordResetToken, generateTwoFactorToken, generateVerificationToken, getTwoFactorToken } from '@/lib/tokens'
 import { sendPasswordResetEmail, sendVerificationTokenEmail } from '@/lib/mails'
-import { getUserByEmail } from './actions'
+import { getUserByEmail } from '@/lib/actions'
 import { eq } from 'drizzle-orm'
+import { ActionState } from '@/lib/definitions'
+import { redirect } from 'next/navigation'
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL
-
-export type ActionState = {
-  errors?: {
-    [key: string]: string[] | undefined
-  },
-  message?: string | null
-  success?: string | null
-  [key: string]: any
-} | undefined
 
 const AuthFormSchema = z.object({
   name: z
@@ -36,7 +29,7 @@ const AuthFormSchema = z.object({
       message: 'Contain at least one special character.'
     })
     .trim(),
-  token: z.string()
+  token: z.optional(z.string())
 })
 
 // sign up user
@@ -54,8 +47,6 @@ export async function insertUser (prevState: ActionState, formData: FormData) {
   }
 
   const validatedFields = SignupFormSchema.safeParse(rawData)
-
-  await new Promise((resolve) => setTimeout(resolve, 2000))
 
   if (!validatedFields.success) {
     return {
@@ -122,10 +113,10 @@ const LoginSchema = AuthFormSchema.omit({
 })
 
 // login user
-export async function login (prevState: ActionState, formData: FormData) {
-  // 1. validate fields
+export async function login (prevState: ActionState, formData: FormData): Promise<ActionState> {
   const validatedFields = LoginSchema.safeParse(Object.fromEntries(formData))
 
+  // 1. validate fields
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
@@ -145,12 +136,12 @@ export async function login (prevState: ActionState, formData: FormData) {
   }
 
   if (!user.emailVerified) {
-    const token = await generateVerificationToken(user.id)
+    const verifyToken = await generateVerificationToken(user.id)
 
     await sendVerificationTokenEmail({
       email: user.email as string,
       name: user.name as string,
-      verificationToken: token.token
+      verificationToken: verifyToken.token
     })
 
     return {
@@ -167,6 +158,16 @@ export async function login (prevState: ActionState, formData: FormData) {
     }
   }
 
+  // twofactor token
+  if (user.isTwoFactorEnabled) {
+    // generate two factor code
+    const twoFactorCode = await generateTwoFactorToken(email)
+    // todo: send two factor code by email
+
+    // redirect to two factor form page
+    redirect(`/two-factor-confirm?token=${twoFactorCode.id}`)
+  }
+
   // 4. create session
   await createSession(user.id)
 }
@@ -177,12 +178,9 @@ export async function logout () {
 }
 
 // forgot password request
-
-// forgot password schema
 const ForgotPasswordSchema = AuthFormSchema.omit({
   name: true,
-  password: true,
-  token: true
+  password: true
 })
 
 export async function forgotPassword (prevState: ActionState, formData: FormData) {
@@ -234,7 +232,7 @@ export async function resetPassword (prevState: ActionState, formData: FormData)
   }
 
   const { password, token } = validatedFields.data
-  const userId = token
+  const userId = token as string
 
   // encript password
   const hashedPassword = await bcrypt.hash(password, 10)
@@ -242,10 +240,63 @@ export async function resetPassword (prevState: ActionState, formData: FormData)
   // update password
   await db.update(users).set({
     password: hashedPassword
-  })
-    .where(eq(users.id, userId))
+  }).where(eq(users.id, userId))
 
   return {
     success: 'Password updated correctly.'
   }
+}
+
+const TwoFactorSchema = z.object({
+  id: z.string(),
+  twoFactorCode: z.string().length(6, { message: 'Two factor must be 6 characters length.' })
+})
+
+// validating two Factor Code
+export async function validateTwoFactor (prevState: ActionState, formData: FormData): Promise<ActionState> {
+  const validatedFields = TwoFactorSchema.safeParse(Object.fromEntries(formData))
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Invalid field.'
+    }
+  }
+
+  const { id, twoFactorCode } = validatedFields.data
+
+  const existingTwoFactor = await getTwoFactorToken(id)
+
+  if (!existingTwoFactor) {
+    return {
+      message: 'Two factor code not found.'
+    }
+  }
+
+  if (new Date(existingTwoFactor.expiredAt as Date) < new Date()) {
+    return {
+      message: 'Two factor code has expired. Please, generate a new one.'
+    }
+  }
+
+  if (existingTwoFactor.token !== twoFactorCode) {
+    return {
+      message: 'Two factor code is incorrect. Please verify your two factor code.'
+    }
+  }
+
+  // recover user from twoFactorToken
+  const email = existingTwoFactor.email as string
+
+  const existingUser = await getUserByEmail(email)
+
+  if (!existingUser) {
+    return {
+      message: 'Account not found. Please, verify again.'
+    }
+  }
+
+  // create session
+  await deleteTwoFactor(id)
+  await createSession(existingUser.id)
 }

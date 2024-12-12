@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 import { UserDTO } from '@/lib/definitions'
-import { ListCheck, Settings, User2 } from 'lucide-react'
+import { LayoutDashboard, ListCheck, Settings, User2 } from 'lucide-react'
 import Link from 'next/link'
 import { use } from 'react'
 
@@ -23,7 +23,7 @@ function Avatar ({ imageSrc }: {
         className='w-8 h-8 rounded-full overflow-hidden relative cursor-pointer'
       >
         <img
-          className='w-8 h-8 object-cover object-center'
+          className='w-8 h-8 object-cover object-center pointer-events-none select-none'
           src={imageSrc}
           alt='Avatar profile photo'
         />
@@ -32,7 +32,7 @@ function Avatar ({ imageSrc }: {
   } else {
     return (
       <div
-        className='w-8 h-8 rounded-full overflow-hidden flex items-center justify-center bg-primary text-primary-foreground relative cursor-pointer'
+        className='w-8 h-8 rounded-full overflow-hidden flex items-center justify-center bg-primary text-primary-foreground relative cursor-pointer pointer-events-none select-none'
       >
         <User2 className='w-4 h-4' />
       </div>
@@ -43,22 +43,28 @@ function Avatar ({ imageSrc }: {
 const menuRoutes = [
   {
     id: 1,
-    href: '/dashboard/settings',
-    label: 'Settings',
-    icon: <Settings className='w-4 h-4' />
+    href: '/dashboard',
+    label: 'Dashboard',
+    icon: <LayoutDashboard className='w-4 h-4' />
   },
   {
     id: 2,
     href: '/dashboard/orders',
     label: 'Orders',
     icon: <ListCheck className='w-4 h-4' />
+  },
+  {
+    id: 3,
+    href: '/dashboard/settings',
+    label: 'Settings',
+    icon: <Settings className='w-4 h-4' />
   }
 ]
 
 export function UserMenu ({ user }: {
   user: Promise<UserDTO>
 }) {
-  const { image } = use(user)
+  const { image, name, email } = use(user)
 
   return (
     <DropdownMenu>
@@ -67,8 +73,14 @@ export function UserMenu ({ user }: {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align='end'
-        className='w-[250px]'
+        className='w-[250px] mt-2'
       >
+        <DropdownMenuItem className='pointer-events-none'>
+          <div className='flex flex-col py-2'>
+            <span className='text-foreground font-medium'>{name}</span>
+            <span>{email}</span>
+          </div>
+        </DropdownMenuItem>
         {menuRoutes.map((item) => (
           <DropdownMenuItem
             className='h-10'
@@ -86,7 +98,7 @@ export function UserMenu ({ user }: {
           className='h-10'
           asChild
         >
-          <LogOutButton className='w-full justify-start' />
+          <LogOutButton variant='secondary' className='w-full justify-start' />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

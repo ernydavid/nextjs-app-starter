@@ -137,7 +137,7 @@ export async function getSession () {
   const session = await decrypt(cookie)
 
   if (session) {
-    return session?.userId
+    return session.userId
   } else {
     return null
   }

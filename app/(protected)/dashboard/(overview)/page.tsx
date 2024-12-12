@@ -4,7 +4,7 @@ export default async function DashboardPage () {
   await new Promise((resolve) => setTimeout(resolve, 1000))
 
   return (
-    <div className='grid py-36 place-content-center place-items-center gap-2'>
+    <div className='w-full grid pt-36 place-content-center place-items-center gap-2'>
       <h2>Content Dashboard</h2>
       <p>Here your dashboard content</p>
     </div>

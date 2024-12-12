@@ -5,10 +5,11 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useActionState } from 'react'
-import { ActionState, login } from '@/app/(auth)/_lib/auth'
+import { login } from '@/app/(auth)/_lib/auth'
 import { ErrorNotification } from '@/components/notification-error'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { ActionState } from '@/lib/definitions'
 
 export function LoginForm () {
   const [state, action, isLoading] = useActionState<ActionState, FormData>(login, {})
@@ -51,7 +52,7 @@ export function LoginForm () {
               Forgot your password?
             </Link>
           </div>
-          {state?.errors?.password && state.errors?.password.map((error, index) => (
+          {state?.errors?.password && state.errors?.password.map((error: string, index: number) => (
             <p
               key={index}
               className='text-error text-sm font-medium'
@@ -65,7 +66,7 @@ export function LoginForm () {
           variant='primary'
           disabled={isLoading}
         >
-          {isLoading ? 'Submitting...' : 'Sign In'}
+          {isLoading ? 'Verifying...' : 'Sign In'}
         </Button>
         {state?.message && <ErrorNotification message={state.message} />}
       </form>

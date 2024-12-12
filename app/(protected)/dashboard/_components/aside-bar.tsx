@@ -22,9 +22,9 @@ const dashboardRoutes = [
 
 export function AsideBar () {
   return (
-    <div className='w-full max-w-[260px] border-r border-r-muted hidden md:flex flex-col px-4 py-5'>
+    <div className='w-full md:max-w-[200px] lg:max-w-[260px] border-r border-r-muted hidden md:flex flex-col px-4 py-5'>
       <Logo />
-      <div className='flex-grow flex flex-col justify-between mt-20'>
+      <div className='flex-grow flex flex-col gap-2 mt-20'>
         <nav className='w-full flex flex-col gap-2'>
           {dashboardRoutes.map((item) => (
             <Link

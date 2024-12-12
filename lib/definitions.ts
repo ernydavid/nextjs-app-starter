@@ -1,3 +1,12 @@
+export type ActionState = {
+  errors?: {
+    [key: string]: string[] | undefined
+  },
+  message?: string | null
+  success?: string | null
+  [key: string]: any
+} | undefined
+
 export type SessionPayload = {
   userId: string
   expiresAt: Date

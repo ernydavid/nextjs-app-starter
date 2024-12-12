@@ -1,10 +1,11 @@
 'use server'
 
-import { getUserById } from '@/app/(auth)/_lib/actions'
+import { getUserById } from '@/lib/actions'
 import { db } from '@/db'
-import { passwordResetToken, verificationToken } from '@/db/schema/tokens'
+import { passwordResetToken, twoFactorToken, verificationToken } from '@/db/schema/tokens'
 import { users } from '@/db/schema/users'
 import { eq, sql } from 'drizzle-orm'
+import Crypto from 'crypto'
 
 // generate verification token
 export async function generateVerificationToken (userId:string) {
@@ -146,4 +147,46 @@ export async function verifyPasswordResetToken (token: string) {
   return {
     success: existingUser.id
   }
+}
+
+// get two factor token by email
+export async function getTwoFactorToken (id: string) {
+  const twoFactorCode = await db.select()
+    .from(twoFactorToken)
+    .where(eq(twoFactorToken.id, id))
+
+  return twoFactorCode[0]
+}
+
+// generate two factor token
+export async function generateTwoFactorToken (email: string) {
+  // generate 6 digits token
+  const token = Crypto.randomInt(100_000, 1_000_000).toString()
+  // set token expired by 5 min
+  const expired = new Date().getTime() + 5 * 60 * 1000
+
+  const existingToken = await db.select()
+    .from(twoFactorToken)
+    .where(eq(twoFactorToken.email, email))
+
+  if (existingToken[0]) {
+    await db.delete(twoFactorToken)
+      .where(eq(twoFactorToken.email, email))
+  }
+
+  const twoFactorCode = await db.insert(twoFactorToken)
+    .values({
+      id: await sql`uuid_generate_v4()`,
+      email,
+      expiredAt: new Date(expired),
+      token
+    }).returning()
+
+  return twoFactorCode[0]
+}
+
+// delete twoFactorToken
+export async function deleteTwoFactor (twoFactorId:string) {
+  await db.delete(twoFactorToken)
+    .where(eq(twoFactorToken.id, twoFactorId))
 }

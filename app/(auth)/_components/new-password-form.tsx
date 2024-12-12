@@ -5,11 +5,12 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useActionState } from 'react'
-import { ActionState, resetPassword } from '@/app/(auth)/_lib/auth'
+import { resetPassword } from '@/app/(auth)/_lib/auth'
 import { ErrorNotification } from '@/components/notification-error'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { SuccessNotification } from '@/components/notification-success'
+import { ActionState } from '@/lib/definitions'
 
 export function NewPasswordForm ({ token }: {
   token: string

@@ -14,11 +14,11 @@
     --warning: 17 82% 66%;
     --error: 0 94% 54%;
     --muted: 0 0% 90.1%;
-    --muted-foreground: 0 0% 45.1%;
+    --muted-foreground: 0 0% 10%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
+    --popover-foreground: 0 0% 35%;
     --accent: 0 0% 96.1%;
     --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
@@ -45,11 +45,11 @@
     --warning: 17 82% 66%;
     --error: 0 92% 26%;
     --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --card: 0 0% 3.9%;
+    --muted-foreground: 0 0% 110%;
+    --card: 0 0% 9%;
     --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 70%;
     --accent: 0 0% 14.9%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
@@ -74,7 +74,7 @@ h2 {
 }
 
 h3 {
-  @apply text-xl tracking-tighter leading-none font-medium
+  @apply text-xl tracking-tighter leading-none font-semibold
 }
 
 @layer base {

@@ -15,7 +15,7 @@ export function BreadCrumb () {
         <LogoIcon className='w-7 h-7' />
       </div>
       <span className='md:hidden flex'>/</span>
-      <span className='font-medium'>{activeTab}</span>
+      <span className='font-medium text-sm md:text-base'>{activeTab}</span>
     </div>
   )
 }

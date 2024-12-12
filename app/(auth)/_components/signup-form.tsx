@@ -5,11 +5,12 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useActionState } from 'react'
-import { ActionState, insertUser } from '@/app/(auth)/_lib/auth'
+import { insertUser } from '@/app/(auth)/_lib/auth'
 import { SuccessNotification } from '@/components/notification-success'
 import { ErrorNotification } from '@/components/notification-error'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
+import { ActionState } from '@/lib/definitions'
 
 export function SignUpForm () {
   const [state, action, isLoading] = useActionState<ActionState, FormData>(insertUser, {})

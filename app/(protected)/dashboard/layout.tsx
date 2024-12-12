@@ -7,9 +7,9 @@ export default function DashboardLayout ({ children }: Readonly<{
   children: ReactNode
 }>) {
   return (
-    <div className='h-[calc(100dvh-48px)] flex flex-col md:flex-row gap-3'>
+    <div className='flex min-h-[calc(100dvh-48px)] flex-col md:flex-row gap-3'>
       <AsideBar />
-      <main className='flex-1 px-4 overflow-y-auto'>
+      <main className='px-4 flex-1'>
         <Suspense fallback={<HeaderSkeleton />}>
           <DashboardHeader />
         </Suspense>

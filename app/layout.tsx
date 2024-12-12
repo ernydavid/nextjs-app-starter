@@ -37,7 +37,7 @@ export default function RootLayout ({
     >
       <body
         className={cn(
-          'min-h-dvh tracking-tight antialiased flex flex-col relative',
+          'min-h-dvh tracking-tight antialiased flex flex-col relative select-none',
           geistSans.className
         )}
       >

@@ -11,7 +11,7 @@ export async function DashboardHeader () {
   const userPromise = getUser()
 
   return (
-    <header className='w-full h-12 flex items-center justify-between gap-3 bg-background md:bg-none'>
+    <header className='w-full h-14 flex items-center justify-between gap-3 bg-background md:bg-none'>
       <BreadCrumb />
       <Suspense fallback={<UserMenuSkeleton />}>
         <UserMenu user={userPromise} />
