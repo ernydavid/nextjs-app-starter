@@ -32,7 +32,7 @@ function Avatar ({ imageSrc }: {
   } else {
     return (
       <div
-        className='w-8 h-8 rounded-full overflow-hidden flex items-center justify-center bg-primary text-primary-foreground relative cursor-pointer pointer-events-none select-none'
+        className='w-8 h-8 rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-sky-500 to-blue-900 text-primary-foreground relative cursor-pointer pointer-events-none select-none'
       >
         <User2 className='w-4 h-4' />
       </div>
