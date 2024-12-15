@@ -92,13 +92,13 @@ export async function insertUser (prevState: ActionState, formData: FormData) {
 
   // create verification url
   const token = verificationToken.token
-  const verificationTokenUrl = `${baseUrl}/verify-account?token=${token}`
+  const verificationUrl = `${baseUrl}/verify-account?token=${token}`
 
   // sending email verification token
   await sendVerificationTokenEmail({
     email: user.email as string,
     name: user.name as string,
-    verificationToken: verificationTokenUrl
+    verificationUrl
   })
 
   return {
@@ -137,11 +137,12 @@ export async function login (prevState: ActionState, formData: FormData): Promis
 
   if (!user.emailVerified) {
     const verifyToken = await generateVerificationToken(user.id)
+    const verificationUrl = `${baseUrl}/verify-account?token=${verifyToken.token}`
 
     await sendVerificationTokenEmail({
       email: user.email as string,
       name: user.name as string,
-      verificationToken: verifyToken.token
+      verificationUrl
     })
 
     return {
