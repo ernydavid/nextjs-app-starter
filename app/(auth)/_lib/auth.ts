@@ -51,7 +51,8 @@ export async function insertUser (prevState: ActionState, formData: FormData) {
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Invalid Fields! Please check values again!'
+      message: 'Invalid Fields! Please check values again!',
+      inputs: rawData
     }
   }
 
@@ -63,7 +64,8 @@ export async function insertUser (prevState: ActionState, formData: FormData) {
   if (existingEmail) {
     return {
       errors: {},
-      message: 'Email already exists, please use a different email or login.'
+      message: 'Email already exists, please use a different email or login.',
+      inputs: rawData
     }
   }
 
@@ -120,7 +122,8 @@ export async function login (prevState: ActionState, formData: FormData): Promis
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Invalid fields.'
+      message: 'Invalid fields.',
+      inputs: Object.fromEntries(formData)
     }
   }
 
@@ -131,7 +134,8 @@ export async function login (prevState: ActionState, formData: FormData): Promis
 
   if (!user) {
     return {
-      message: 'Email not found. try to sign up first.'
+      message: 'Email not found. try to sign up first.',
+      inputs: Object.fromEntries(formData)
     }
   }
 
@@ -155,7 +159,8 @@ export async function login (prevState: ActionState, formData: FormData): Promis
 
   if (!passwordMatch) {
     return {
-      message: 'Incorrect password.'
+      message: 'Incorrect password.',
+      inputs: Object.fromEntries(formData)
     }
   }
 
@@ -190,7 +195,8 @@ export async function forgotPassword (prevState: ActionState, formData: FormData
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Invalid fields.'
+      message: 'Invalid fields.',
+      inputs: validatedFields.data
     }
   }
 
@@ -200,7 +206,8 @@ export async function forgotPassword (prevState: ActionState, formData: FormData
 
   if (!existingUser) {
     return {
-      message: 'Email is not associated to an existing account. Please, sign up or try with diferent email.'
+      message: 'Email is not associated to an existing account. Please, sign up or try with diferent email.',
+      inputs: Object.fromEntries(formData)
     }
   }
 
@@ -228,7 +235,8 @@ export async function resetPassword (prevState: ActionState, formData: FormData)
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Invalid fields.'
+      message: 'Invalid fields.',
+      inputs: validatedFields.data
     }
   }
 

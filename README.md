@@ -1,5 +1,8 @@
 ## NextJS Started App
 
+A nextjs started app with authentication and database.
+Stack: NextJS, Tailwind, ShadCN, Neon Postgress, Drizzle ORM and TypeScript
+
 ## Getting Started
 
 First, install dependencies with

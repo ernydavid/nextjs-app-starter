@@ -30,8 +30,8 @@ export function ForgotPasswordForm () {
             name='email'
             placeholder='Enter your email'
             type='email'
+            defaultValue={state?.inputs?.email}
             disabled={isLoading}
-            sizes='sm'
           />
           {state?.errors?.email && <p className='text-error text-sm font-medium'>{state.errors?.email}</p>}
         </div>

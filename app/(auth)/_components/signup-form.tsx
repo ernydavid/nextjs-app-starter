@@ -30,8 +30,8 @@ export function SignUpForm () {
             name='name'
             placeholder='Enter your name'
             type='text'
+            defaultValue={state?.inputs?.name}
             disabled={isLoading}
-            sizes='sm'
           />
           {state?.errors?.name && <p className='text-error text-sm font-medium'>{state.errors?.name}</p>}
         </div>
@@ -42,8 +42,8 @@ export function SignUpForm () {
             name='email'
             placeholder='Enter your email'
             type='email'
+            defaultValue={state?.inputs?.email}
             disabled={isLoading}
-            sizes='sm'
           />
           {state?.errors?.email && <p className='text-error text-sm font-medium'>{state.errors?.email}</p>}
         </div>
@@ -54,8 +54,8 @@ export function SignUpForm () {
             name='password'
             placeholder='*******'
             type='password'
+            defaultValue={state?.inputs?.password}
             disabled={isLoading}
-            sizes='sm'
           />
           {state?.errors?.password && state.errors?.password.map((error, index) => (
             <p

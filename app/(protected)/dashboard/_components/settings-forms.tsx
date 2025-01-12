@@ -81,7 +81,6 @@ export function UpdateNameForm ({ currentName }: {
                   placeholder='Enter your name'
                   type='text'
                   disabled={isLoading}
-                  sizes='sm'
                   defaultValue={currentName}
                   onChange={handleChangeName}
                 />
@@ -133,7 +132,6 @@ export function UpdatePasswordForm () {
                   placeholder='Enter your current password'
                   type='password'
                   disabled={isLoading}
-                  sizes='sm'
                 />
                 {state?.errors?.password && state.errors.password.map((error, index) => (
                   <p
@@ -152,7 +150,6 @@ export function UpdatePasswordForm () {
                     placeholder='Enter your new password'
                     type='password'
                     disabled={isLoading}
-                    sizes='sm'
                   />
                   {state?.success && <Check />}
                 </div>

@@ -1,39 +1,17 @@
+import * as React from 'react'
+
 import { cn } from '@/lib/utils'
-import { cva, type VariantProps } from 'class-variance-authority'
-import { InputHTMLAttributes, forwardRef } from 'react'
 
-const inputVariants = cva(
-  'inline-flex items-center tracking-tight whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
-  {
-    variants: {
-      variant: {
-        default: 'bg-background text-foreground border border-muted placeholder:text-muted-foreground',
-        filled: 'bg-secondary/10 dark:bg-secondary/40 text-foreground placeholder:text-muted-foreground'
-      },
-      sizes: {
-        default: 'h-10 px-4',
-        sm: 'h-9 px-4 text-sm',
-        lg: 'h-12 px-4 text-lg'
-      }
-    },
-    defaultVariants: {
-      variant: 'default',
-      sizes: 'default'
-    }
-  }
-)
-
-interface InputProps extends InputHTMLAttributes<HTMLInputElement>, VariantProps<typeof inputVariants> {}
-
-const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ variant, sizes, className, ...props }, ref) => {
+const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
+  ({ className, type, ...props }, ref) => {
     return (
       <input
-        ref={ref}
+        type={type}
         className={cn(
-          inputVariants({ variant, sizes }),
+          'flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
           className
         )}
+        ref={ref}
         {...props}
       />
     )
@@ -41,4 +19,4 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 )
 Input.displayName = 'Input'
 
-export { Input, inputVariants }
+export { Input }

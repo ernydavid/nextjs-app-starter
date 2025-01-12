@@ -41,8 +41,8 @@ export function NewPasswordForm ({ token }: {
             name='password'
             placeholder='*******'
             type='password'
+            defaultValue={state?.inputs?.password}
             disabled={isLoading}
-            sizes='sm'
           />
           {state?.errors?.password && state.errors?.password.map((error, index) => (
             <p
